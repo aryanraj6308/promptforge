@@ -1,0 +1,189 @@
+PromptForge
+AI SaaS
+A production-ready Next.js 16 starter for AI-powered SaaS products — dark-first design system, custom Tailwind tokens, TypeScript throughout.
+
+→ Get Started
+Project Structure
+Scripts
+// tech stack
+Built with
+Every dependency is intentionally chosen. No bloat, no magic — just solid primitives.
+
+⬛
+Next.js
+^16.2.6 · App Router
+⚛️
+React
+^19.2.0 · RSC-ready
+🟦
+TypeScript
+^5.9.3 · strict mode
+🎨
+Tailwind CSS
+3.4.4 · custom tokens
+✨
+lucide-react
+0.468.0 · icons
+🔗
+clsx
+2.1.1 · classnames
+// quickstart
+Getting Started
+1 · Clone & install
+bash
+copy
+# Clone the repository
+git clone https://github.com/your-org/promptforge-ai-saas.git
+cd promptforge-ai-saas
+
+# Install dependencies (uses package-lock.json)
+npm ci
+2 · Configure environment
+bash
+copy
+cp .env.example .env.local
+Edit .env.local with your values — see the Environment Variables section below.
+
+3 · Run locally
+bash
+copy
+npm run dev
+Open http://localhost:3000 in your browser.
+
+Node.js requirement: This project requires Node.js 20 or later. Run node -v to confirm your version.
+// architecture
+Project Structure
+The App Router layout keeps concerns cleanly separated. All source lives under app/, components/, and lib/.
+
+promptforge-ai-saas/
+📁 app/
+Next.js App Router root
+   
+├─
+layout.tsx
+Root layout, metadata
+   
+├─
+page.tsx
+Landing page
+   
+├─
+📁 dashboard/
+   │  
+└─
+page.tsx
+Auth-protected area
+   
+└─
+📁 api/
+Route handlers
+ 
+📁 components/
+Shared UI components
+   
+├─
+ui/
+Primitives (buttons, inputs)
+   
+└─
+layout/
+Header, footer, sidebar
+ 
+📁 lib/
+Utilities & helpers
+ 
+tailwind.config.ts
+Custom ink/accent/ember tokens
+tsconfig.json
+Strict TS, @/* path alias
+package.json
+next.config.mjs
+postcss.config.mjs
+// design system
+Tailwind Design Tokens
+The project ships three custom color families defined in tailwind.config.ts.
+
+tailwind.config.ts · colors
+copy
+// ink — neutral grays
+ink-50:  #f7f8fa   → page background
+ink-100: #ebeef2   → card surfaces
+ink-300: #b7c0cc   → borders
+ink-500: #657184   → muted text
+ink-700: #333b49   → body text
+ink-900: #11151c   → headings
+
+// accent — teal/green (primary brand)
+accent-400: #35cfa1  → hover states
+accent-500: #12b886  → primary actions
+accent-600: #0b946d  → pressed / border
+
+// ember — warm amber (highlights)
+ember-100: #fff0d9  → warning bg
+ember-400: #ffad4d  → highlight text
+ember-500: #f58b22  → badge / tag
+Custom utilities also include shadow-soft, shadow-panel, and the animate-fade-up / animate-pulse-soft keyframe animations.
+
+// commands
+NPM Scripts
+npm run dev
+Start the development server with hot reload on port 3000
+npm run build
+Create an optimised production build in .next/
+npm run start
+Serve the production build (run build first)
+npm run lint
+Run ESLint across the entire codebase via eslint.config.mjs
+// configuration
+Environment Variables
+Create a .env.local file at the project root. Never commit secrets to version control — .env*.local is already in .gitignore.
+
+environment
+Variable	Purpose	Example
+NEXT_PUBLIC_APP_URL required	Public base URL of your deployment	http://localhost:3000
+ANTHROPIC_API_KEY required	Anthropic API key for AI features	sk-ant-…
+DATABASE_URL required	PostgreSQL / Neon / PlanetScale URL	postgres://…
+NEXTAUTH_SECRET required	Random secret for session signing	openssl rand -base64 32
+STRIPE_SECRET_KEY optional	Stripe key for billing features	sk_test_…
+RESEND_API_KEY optional	Email delivery via Resend	re_…
+Security note: Variables prefixed with NEXT_PUBLIC_ are bundled into the client and visible in the browser. Never put secrets there.
+// highlights
+What's Included
+✦
+App Router
+Nested layouts, server components, streaming — all ready out of the box.
+✦
+Strict TypeScript
+Full type-safety with @/* path aliases pre-configured.
+✦
+Custom Design Tokens
+ink / accent / ember palette with animations baked into Tailwind.
+✦
+Dark Mode
+darkMode: "class" — toggle at runtime, no flash of unstyled content.
+✦
+ESLint 9
+Flat config format with Next.js-specific rules pre-wired.
+✦
+PostCSS + Autoprefixer
+CSS pipeline that handles vendor prefixes automatically.
+// open source
+Contributing
+Contributions, bug reports, and feature requests are welcome. Please open an issue before submitting a pull request for significant changes.
+
+bash · workflow
+copy
+# 1. Fork the repo, then:
+git checkout -b feat/your-feature-name
+
+# 2. Make your changes and verify lint passes
+npm run lint
+
+# 3. Confirm the production build succeeds
+npm run build
+
+# 4. Push and open a Pull Request
+git push origin feat/your-feature-name
+Commit style: Use conventional commits — feat:, fix:, chore:, docs: — so the changelog stays readable.
+PromptForge AI
+MIT License · v1.0.0 · Built with Next.js 16 & React 19
