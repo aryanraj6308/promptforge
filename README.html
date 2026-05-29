@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PromptForge — AI SaaS README</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink-50: #f7f8fa;
+      --ink-100: #ebeef2;
+      --ink-300: #b7c0cc;
+      --ink-500: #657184;
+      --ink-700: #333b49;
+      --ink-900: #11151c;
+      --accent-50: #edfdf8;
+      --accent-100: #d4f8ee;
+      --accent-400: #35cfa1;
+      --accent-500: #12b886;
+      --accent-600: #0b946d;
+      --ember-100: #fff0d9;
+      --ember-400: #ffad4d;
+      --ember-500: #f58b22;
+      --bg: #0d1117;
+      --bg-card: #161b22;
+      --bg-card2: #1c2230;
+      --border: rgba(255,255,255,0.08);
+      --border-strong: rgba(255,255,255,0.14);
+      --text-primary: #e6edf3;
+      --text-muted: #8b949e;
+      --text-faint: #484f58;
+      --mono: 'DM Mono', monospace;
+      --sans: 'DM Sans', sans-serif;
+      --display: 'Syne', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* ── GRID BACKGROUND ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(53,207,161,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(53,207,161,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── HEADER / HERO ── */
+    .hero {
+      padding: 64px 0 48px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 4px;
+      border: 1px solid;
+      letter-spacing: 0.02em;
+    }
+    .badge-green  { color: var(--accent-400); border-color: rgba(53,207,161,0.3); background: rgba(53,207,161,0.07); }
+    .badge-amber  { color: var(--ember-400);  border-color: rgba(255,173,77,0.3);  background: rgba(255,173,77,0.07);  }
+    .badge-blue   { color: #79c0ff;            border-color: rgba(121,192,255,0.3); background: rgba(121,192,255,0.07);}
+    .badge-gray   { color: var(--text-muted);  border-color: var(--border);         background: var(--bg-card);         }
+
+    .hero-title {
+      font-family: var(--display);
+      font-size: clamp(36px, 6vw, 58px);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+
+    .hero-title .slash { color: var(--accent-500); }
+
+    .hero-sub {
+      font-size: 17px;
+      color: var(--text-muted);
+      max-width: 560px;
+      line-height: 1.65;
+      margin-bottom: 32px;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 7px;
+      border: 1px solid;
+      text-decoration: none;
+      transition: all 0.18s ease;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--accent-500);
+      color: #fff;
+      border-color: var(--accent-600);
+    }
+    .btn-primary:hover { background: var(--accent-400); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-primary);
+      border-color: var(--border-strong);
+    }
+    .btn-ghost:hover { background: var(--bg-card); }
+
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-400); display: inline-block; animation: pulse 2.6s ease-in-out infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+
+    /* ── SECTION HEADERS ── */
+    .section { padding: 48px 0 0; }
+    .section + .section { border-top: 1px solid var(--border); margin-top: 48px; }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-500);
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-family: var(--display);
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+    }
+
+    h3 {
+      font-family: var(--display);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    p { color: var(--text-muted); margin-bottom: 14px; }
+    p:last-child { margin-bottom: 0; }
+
+    /* ── STACK DISPLAY ── */
+    .stack-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .stack-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+      transition: border-color 0.18s;
+    }
+    .stack-card:hover { border-color: var(--border-strong); }
+
+    .stack-icon {
+      font-size: 20px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .stack-name {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text-primary);
+      font-weight: 500;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .stack-ver {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-faint);
+    }
+
+    /* ── FILE TREE ── */
+    .file-tree {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+
+    .tree-header {
+      background: var(--bg-card2);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .dot-row { display: flex; gap: 6px; }
+    .dot-mac { width: 12px; height: 12px; border-radius: 50%; }
+    .dot-red  { background: #ff5f57; }
+    .dot-yel  { background: #febc2e; }
+    .dot-grn  { background: #28c840; }
+
+    .tree-filename {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .tree-body {
+      padding: 16px 20px;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 2;
+    }
+
+    .tree-line { display: flex; align-items: center; gap: 0; }
+    .tree-indent { color: var(--text-faint); white-space: pre; }
+    .tree-branch { color: var(--text-faint); }
+    .tree-folder { color: var(--ember-400); }
+    .tree-file   { color: var(--text-muted); }
+    .tree-file.tsx { color: #79c0ff; }
+    .tree-file.ts  { color: #79c0ff; }
+    .tree-file.css { color: #ff7b72; }
+    .tree-file.json { color: var(--accent-400); }
+    .tree-comment { color: var(--text-faint); font-style: italic; margin-left: 8px; }
+
+    /* ── CODE BLOCK ── */
+    .code-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 20px 0;
+    }
+
+    .code-header {
+      background: var(--bg-card2);
+      border-bottom: 1px solid var(--border);
+      padding: 9px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .code-lang {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-faint);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .code-copy {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 10px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .code-copy:hover { color: var(--accent-400); border-color: rgba(53,207,161,0.3); }
+
+    pre {
+      padding: 18px 20px;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.75;
+      color: var(--text-primary);
+    }
+
+    .kw  { color: #ff7b72; }
+    .fn  { color: #d2a8ff; }
+    .str { color: var(--accent-400); }
+    .num { color: var(--ember-400); }
+    .cm  { color: var(--text-faint); font-style: italic; }
+    .at  { color: #79c0ff; }
+    .px  { color: #ffa657; }
+
+    /* ── FEATURE LIST ── */
+    .feature-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .feature-list li {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .feature-list li .fi {
+      color: var(--accent-500);
+      font-size: 16px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* ── COMMANDS ── */
+    .cmd-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .cmd {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+    }
+
+    .cmd-name {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--accent-400);
+      min-width: 120px;
+    }
+
+    .cmd-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* ── ENV VARS ── */
+    .env-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 13px;
+    }
+
+    .env-table th {
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-faint);
+      padding: 8px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .env-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    .env-table tr:last-child td { border-bottom: none; }
+
+    .env-table td:first-child {
+      font-family: var(--mono);
+      color: #79c0ff;
+      white-space: nowrap;
+    }
+
+    .env-table td:nth-child(2) { color: var(--text-muted); }
+
+    .env-table td:last-child {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-faint);
+    }
+
+    .env-req {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 3px;
+      border: 1px solid rgba(255,173,77,0.3);
+      background: rgba(255,173,77,0.08);
+      color: var(--ember-400);
+      vertical-align: middle;
+      margin-left: 4px;
+    }
+
+    .env-opt {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 3px;
+      border: 1px solid var(--border);
+      color: var(--text-faint);
+      vertical-align: middle;
+      margin-left: 4px;
+    }
+
+    /* ── CALLOUT ── */
+    .callout {
+      border-left: 3px solid var(--accent-500);
+      background: rgba(18, 184, 134, 0.06);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin: 20px 0;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .callout-warn {
+      border-left-color: var(--ember-500);
+      background: rgba(245, 139, 34, 0.06);
+    }
+
+    .callout strong { color: var(--text-primary); font-weight: 500; }
+
+    /* ── FOOTER ── */
+    .footer {
+      margin-top: 64px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-brand {
+      font-family: var(--display);
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+    }
+
+    .footer-brand span { color: var(--accent-500); }
+
+    .footer-meta {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-faint);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero      { animation: fadeUp 700ms ease both; }
+    .section   { animation: fadeUp 700ms ease both; animation-delay: 100ms; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .hero-title { font-size: 34px; }
+      .stack-grid { grid-template-columns: 1fr 1fr; }
+      .cmd { flex-direction: column; gap: 6px; }
+      .cmd-name { min-width: auto; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ── HERO ── -->
+  <header class="hero">
+    <div class="badge-row">
+      <span class="badge badge-green"><span class="dot"></span> v1.0.0 stable</span>
+      <span class="badge badge-blue">Next.js 16</span>
+      <span class="badge badge-blue">React 19</span>
+      <span class="badge badge-amber">TypeScript 5.9</span>
+      <span class="badge badge-gray">MIT License</span>
+    </div>
+
+    <h1 class="hero-title">Prompt<span class="slash">Forge</span><br>AI SaaS</h1>
+    <p class="hero-sub">
+      A production-ready Next.js 16 starter for AI-powered SaaS products — dark-first design system, custom Tailwind tokens, TypeScript throughout.
+    </p>
+    <div class="btn-row">
+      <a class="btn btn-primary" href="#getting-started">→ Get Started</a>
+      <a class="btn btn-ghost" href="#project-structure">Project Structure</a>
+      <a class="btn btn-ghost" href="#scripts">Scripts</a>
+    </div>
+  </header>
+
+  <!-- ── STACK ── -->
+  <section class="section" id="stack">
+    <div class="section-label">// tech stack</div>
+    <h2>Built with</h2>
+    <p>Every dependency is intentionally chosen. No bloat, no magic — just solid primitives.</p>
+
+    <div class="stack-grid">
+      <div class="stack-card">
+        <span class="stack-icon">⬛</span>
+        <span class="stack-name">Next.js</span>
+        <span class="stack-ver">^16.2.6 · App Router</span>
+      </div>
+      <div class="stack-card">
+        <span class="stack-icon">⚛️</span>
+        <span class="stack-name">React</span>
+        <span class="stack-ver">^19.2.0 · RSC-ready</span>
+      </div>
+      <div class="stack-card">
+        <span class="stack-icon">🟦</span>
+        <span class="stack-name">TypeScript</span>
+        <span class="stack-ver">^5.9.3 · strict mode</span>
+      </div>
+      <div class="stack-card">
+        <span class="stack-icon">🎨</span>
+        <span class="stack-name">Tailwind CSS</span>
+        <span class="stack-ver">3.4.4 · custom tokens</span>
+      </div>
+      <div class="stack-card">
+        <span class="stack-icon">✨</span>
+        <span class="stack-name">lucide-react</span>
+        <span class="stack-ver">0.468.0 · icons</span>
+      </div>
+      <div class="stack-card">
+        <span class="stack-icon">🔗</span>
+        <span class="stack-name">clsx</span>
+        <span class="stack-ver">2.1.1 · classnames</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── GETTING STARTED ── -->
+  <section class="section" id="getting-started">
+    <div class="section-label">// quickstart</div>
+    <h2>Getting Started</h2>
+
+    <h3>1 · Clone &amp; install</h3>
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">bash</span>
+        <button class="code-copy" onclick="copyCode(this)">copy</button>
+      </div>
+      <pre><span class="cm"># Clone the repository</span>
+git clone https://github.com/your-org/promptforge-ai-saas.git
+<span class="kw">cd</span> promptforge-ai-saas
+
+<span class="cm"># Install dependencies (uses package-lock.json)</span>
+npm ci</pre>
+    </div>
+
+    <h3>2 · Configure environment</h3>
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">bash</span>
+        <button class="code-copy" onclick="copyCode(this)">copy</button>
+      </div>
+      <pre>cp .env.example .env.local</pre>
+    </div>
+    <p>Edit <code style="font-family: var(--mono); font-size: 12px; color: #79c0ff; background: var(--bg-card); padding: 2px 6px; border-radius: 4px;">.env.local</code> with your values — see the <a href="#env-vars" style="color: var(--accent-400);">Environment Variables</a> section below.</p>
+
+    <h3>3 · Run locally</h3>
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">bash</span>
+        <button class="code-copy" onclick="copyCode(this)">copy</button>
+      </div>
+      <pre>npm run dev</pre>
+    </div>
+    <p>Open <a href="http://localhost:3000" style="color: var(--accent-400);">http://localhost:3000</a> in your browser.</p>
+
+    <div class="callout">
+      <strong>Node.js requirement:</strong> This project requires Node.js 20 or later. Run <code style="font-family: var(--mono); font-size: 12px;">node -v</code> to confirm your version.
+    </div>
+  </section>
+
+  <!-- ── PROJECT STRUCTURE ── -->
+  <section class="section" id="project-structure">
+    <div class="section-label">// architecture</div>
+    <h2>Project Structure</h2>
+    <p>The App Router layout keeps concerns cleanly separated. All source lives under <code style="font-family: var(--mono); font-size: 12px; color: #79c0ff;">app/</code>, <code style="font-family: var(--mono); font-size: 12px; color: #79c0ff;">components/</code>, and <code style="font-family: var(--mono); font-size: 12px; color: #79c0ff;">lib/</code>.</p>
+
+    <div class="file-tree">
+      <div class="tree-header">
+        <div class="dot-row">
+          <div class="dot-mac dot-red"></div>
+          <div class="dot-mac dot-yel"></div>
+          <div class="dot-mac dot-grn"></div>
+        </div>
+        <span class="tree-filename">promptforge-ai-saas/</span>
+      </div>
+      <div class="tree-body">
+        <div class="tree-line"><span class="tree-folder">📁 app/</span><span class="tree-comment">Next.js App Router root</span></div>
+        <div class="tree-line"><span class="tree-indent">   </span><span class="tree-branch">├─ </span><span class="tree-file tsx">layout.tsx</span><span class="tree-comment">Root layout, metadata</span></div>
+        <div class="tree-line"><span class="tree-indent">   </span><span class="tree-branch">├─ </span><span class="tree-file tsx">page.tsx</span><span class="tree-comment">Landing page</span></div>
+        <div class="tree-line"><span class="tree-indent">   </span><span class="tree-branch">├─ </span><span class="tree-folder">📁 dashboard/</span></div>
+        <div class="tree-line"><span class="tree-indent">   │  </span><span class="tree-branch">└─ </span><span class="tree-file tsx">page.tsx</span><span class="tree-comment">Auth-protected area</span></div>
+        <div class="tree-line"><span class="tree-indent">   </span><span class="tree-branch">└─ </span><span class="tree-folder">📁 api/</span><span class="tree-comment">Route handlers</span></div>
+        <div class="tree-line">&nbsp;</div>
+        <div class="tree-line"><span class="tree-folder">📁 components/</span><span class="tree-comment">Shared UI components</span></div>
+        <div class="tree-line"><span class="tree-indent">   </span><span class="tree-branch">├─ </span><span class="tree-file tsx">ui/</span><span class="tree-comment">Primitives (buttons, inputs)</span></div>
+        <div class="tree-line"><span class="tree-indent">   </span><span class="tree-branch">└─ </span><span class="tree-file tsx">layout/</span><span class="tree-comment">Header, footer, sidebar</span></div>
+        <div class="tree-line">&nbsp;</div>
+        <div class="tree-line"><span class="tree-folder">📁 lib/</span><span class="tree-comment">Utilities &amp; helpers</span></div>
+        <div class="tree-line">&nbsp;</div>
+        <div class="tree-line"><span class="tree-file ts">tailwind.config.ts</span><span class="tree-comment">Custom ink/accent/ember tokens</span></div>
+        <div class="tree-line"><span class="tree-file ts">tsconfig.json</span><span class="tree-comment">Strict TS, @/* path alias</span></div>
+        <div class="tree-line"><span class="tree-file json">package.json</span></div>
+        <div class="tree-line"><span class="tree-file">next.config.mjs</span></div>
+        <div class="tree-line"><span class="tree-file css">postcss.config.mjs</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── DESIGN TOKENS ── -->
+  <section class="section" id="design-tokens">
+    <div class="section-label">// design system</div>
+    <h2>Tailwind Design Tokens</h2>
+    <p>The project ships three custom color families defined in <code style="font-family: var(--mono); font-size: 12px; color: #79c0ff;">tailwind.config.ts</code>.</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">tailwind.config.ts · colors</span>
+        <button class="code-copy" onclick="copyCode(this)">copy</button>
+      </div>
+      <pre><span class="cm">// ink — neutral grays</span>
+<span class="at">ink</span>-<span class="num">50</span>:  <span class="str">#f7f8fa</span>   <span class="cm">→ page background</span>
+<span class="at">ink</span>-<span class="num">100</span>: <span class="str">#ebeef2</span>   <span class="cm">→ card surfaces</span>
+<span class="at">ink</span>-<span class="num">300</span>: <span class="str">#b7c0cc</span>   <span class="cm">→ borders</span>
+<span class="at">ink</span>-<span class="num">500</span>: <span class="str">#657184</span>   <span class="cm">→ muted text</span>
+<span class="at">ink</span>-<span class="num">700</span>: <span class="str">#333b49</span>   <span class="cm">→ body text</span>
+<span class="at">ink</span>-<span class="num">900</span>: <span class="str">#11151c</span>   <span class="cm">→ headings</span>
+
+<span class="cm">// accent — teal/green (primary brand)</span>
+<span class="at">accent</span>-<span class="num">400</span>: <span class="str">#35cfa1</span>  <span class="cm">→ hover states</span>
+<span class="at">accent</span>-<span class="num">500</span>: <span class="str">#12b886</span>  <span class="cm">→ primary actions</span>
+<span class="at">accent</span>-<span class="num">600</span>: <span class="str">#0b946d</span>  <span class="cm">→ pressed / border</span>
+
+<span class="cm">// ember — warm amber (highlights)</span>
+<span class="at">ember</span>-<span class="num">100</span>: <span class="str">#fff0d9</span>  <span class="cm">→ warning bg</span>
+<span class="at">ember</span>-<span class="num">400</span>: <span class="str">#ffad4d</span>  <span class="cm">→ highlight text</span>
+<span class="at">ember</span>-<span class="num">500</span>: <span class="str">#f58b22</span>  <span class="cm">→ badge / tag</span></pre>
+    </div>
+
+    <p>Custom utilities also include <code style="font-family: var(--mono); font-size: 12px; color: #79c0ff;">shadow-soft</code>, <code style="font-family: var(--mono); font-size: 12px; color: #79c0ff;">shadow-panel</code>, and the <code style="font-family: var(--mono); font-size: 12px; color: #79c0ff;">animate-fade-up</code> / <code style="font-family: var(--mono); font-size: 12px; color: #79c0ff;">animate-pulse-soft</code> keyframe animations.</p>
+  </section>
+
+  <!-- ── SCRIPTS ── -->
+  <section class="section" id="scripts">
+    <div class="section-label">// commands</div>
+    <h2>NPM Scripts</h2>
+
+    <div class="cmd-list">
+      <div class="cmd">
+        <span class="cmd-name">npm run dev</span>
+        <span class="cmd-desc">Start the development server with hot reload on port 3000</span>
+      </div>
+      <div class="cmd">
+        <span class="cmd-name">npm run build</span>
+        <span class="cmd-desc">Create an optimised production build in <code style="font-family: var(--mono); font-size: 12px;">.next/</code></span>
+      </div>
+      <div class="cmd">
+        <span class="cmd-name">npm run start</span>
+        <span class="cmd-desc">Serve the production build (run <code style="font-family: var(--mono); font-size: 12px;">build</code> first)</span>
+      </div>
+      <div class="cmd">
+        <span class="cmd-name">npm run lint</span>
+        <span class="cmd-desc">Run ESLint across the entire codebase via <code style="font-family: var(--mono); font-size: 12px;">eslint.config.mjs</code></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ENV VARS ── -->
+  <section class="section" id="env-vars">
+    <div class="section-label">// configuration</div>
+    <h2>Environment Variables</h2>
+    <p>Create a <code style="font-family: var(--mono); font-size: 12px; color: #79c0ff;">.env.local</code> file at the project root. Never commit secrets to version control — <code style="font-family: var(--mono); font-size: 12px; color: #79c0ff;">.env*.local</code> is already in <code style="font-family: var(--mono); font-size: 12px; color: #79c0ff;">.gitignore</code>.</p>
+
+    <div class="code-block" style="overflow-x: auto;">
+      <div class="code-header">
+        <span class="code-lang">environment</span>
+      </div>
+      <table class="env-table">
+        <thead>
+          <tr>
+            <th>Variable</th>
+            <th>Purpose</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>NEXT_PUBLIC_APP_URL <span class="env-req">required</span></td>
+            <td>Public base URL of your deployment</td>
+            <td>http://localhost:3000</td>
+          </tr>
+          <tr>
+            <td>ANTHROPIC_API_KEY <span class="env-req">required</span></td>
+            <td>Anthropic API key for AI features</td>
+            <td>sk-ant-…</td>
+          </tr>
+          <tr>
+            <td>DATABASE_URL <span class="env-req">required</span></td>
+            <td>PostgreSQL / Neon / PlanetScale URL</td>
+            <td>postgres://…</td>
+          </tr>
+          <tr>
+            <td>NEXTAUTH_SECRET <span class="env-req">required</span></td>
+            <td>Random secret for session signing</td>
+            <td>openssl rand -base64 32</td>
+          </tr>
+          <tr>
+            <td>STRIPE_SECRET_KEY <span class="env-opt">optional</span></td>
+            <td>Stripe key for billing features</td>
+            <td>sk_test_…</td>
+          </tr>
+          <tr>
+            <td>RESEND_API_KEY <span class="env-opt">optional</span></td>
+            <td>Email delivery via Resend</td>
+            <td>re_…</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-warn">
+      <strong>Security note:</strong> Variables prefixed with <code style="font-family: var(--mono); font-size: 12px;">NEXT_PUBLIC_</code> are bundled into the client and visible in the browser. Never put secrets there.
+    </div>
+  </section>
+
+  <!-- ── FEATURES ── -->
+  <section class="section" id="features">
+    <div class="section-label">// highlights</div>
+    <h2>What's Included</h2>
+
+    <ul class="feature-list">
+      <li><span class="fi">✦</span><div><strong style="color: var(--text-primary); font-weight: 500;">App Router</strong><br>Nested layouts, server components, streaming — all ready out of the box.</div></li>
+      <li><span class="fi">✦</span><div><strong style="color: var(--text-primary); font-weight: 500;">Strict TypeScript</strong><br>Full type-safety with <code style="font-family: var(--mono); font-size: 12px;">@/*</code> path aliases pre-configured.</div></li>
+      <li><span class="fi">✦</span><div><strong style="color: var(--text-primary); font-weight: 500;">Custom Design Tokens</strong><br>ink / accent / ember palette with animations baked into Tailwind.</div></li>
+      <li><span class="fi">✦</span><div><strong style="color: var(--text-primary); font-weight: 500;">Dark Mode</strong><br><code style="font-family: var(--mono); font-size: 12px;">darkMode: "class"</code> — toggle at runtime, no flash of unstyled content.</div></li>
+      <li><span class="fi">✦</span><div><strong style="color: var(--text-primary); font-weight: 500;">ESLint 9</strong><br>Flat config format with Next.js-specific rules pre-wired.</div></li>
+      <li><span class="fi">✦</span><div><strong style="color: var(--text-primary); font-weight: 500;">PostCSS + Autoprefixer</strong><br>CSS pipeline that handles vendor prefixes automatically.</div></li>
+    </ul>
+  </section>
+
+  <!-- ── CONTRIBUTING ── -->
+  <section class="section" id="contributing">
+    <div class="section-label">// open source</div>
+    <h2>Contributing</h2>
+    <p>Contributions, bug reports, and feature requests are welcome. Please open an issue before submitting a pull request for significant changes.</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">bash · workflow</span>
+        <button class="code-copy" onclick="copyCode(this)">copy</button>
+      </div>
+      <pre><span class="cm"># 1. Fork the repo, then:</span>
+git checkout -b feat/your-feature-name
+
+<span class="cm"># 2. Make your changes and verify lint passes</span>
+npm run lint
+
+<span class="cm"># 3. Confirm the production build succeeds</span>
+npm run build
+
+<span class="cm"># 4. Push and open a Pull Request</span>
+git push origin feat/your-feature-name</pre>
+    </div>
+
+    <div class="callout">
+      <strong>Commit style:</strong> Use conventional commits — <code style="font-family: var(--mono); font-size: 12px;">feat:</code>, <code style="font-family: var(--mono); font-size: 12px;">fix:</code>, <code style="font-family: var(--mono); font-size: 12px;">chore:</code>, <code style="font-family: var(--mono); font-size: 12px;">docs:</code> — so the changelog stays readable.
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    <span class="footer-brand">Prompt<span>Forge</span> AI</span>
+    <span class="footer-meta">MIT License · v1.0.0 · Built with Next.js 16 &amp; React 19</span>
+  </footer>
+
+</div>
+
+<script>
+  function copyCode(btn) {
+    const pre = btn.closest('.code-block').querySelector('pre');
+    const text = pre.innerText || pre.textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'copied!';
+      btn.style.color = 'var(--accent-400)';
+      setTimeout(() => { btn.textContent = 'copy'; btn.style.color = ''; }, 1800);
+    });
+  }
+</script>
+</body>
+</html>
