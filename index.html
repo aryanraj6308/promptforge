@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="PromptForge — Production-ready Next.js 16 AI SaaS starter. Ship your AI product in days, not months." />
+  <meta property="og:title" content="PromptForge AI SaaS" />
+  <meta property="og:description" content="Production-ready Next.js 16 starter for AI-powered SaaS products." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://aryanraj6308.github.io/promptforge-ai-saas/" />
+  <meta name="theme-color" content="#0d1117" />
+  <title>PromptForge — AI SaaS Starter</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,700;12..96,800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent:     #12b886;
+      --accent-hi:  #35cfa1;
+      --accent-lo:  #0b946d;
+      --ember:      #f58b22;
+      --ember-hi:   #ffad4d;
+      --bg:         #0b0f14;
+      --bg-card:    #131820;
+      --bg-card2:   #1a2030;
+      --border:     rgba(255,255,255,0.07);
+      --border-md:  rgba(255,255,255,0.12);
+      --border-hi:  rgba(53,207,161,0.35);
+      --text:       #dde3ec;
+      --text-2:     #8892a4;
+      --text-3:     #424c5c;
+      --mono:       'DM Mono', monospace;
+      --sans:       'DM Sans', sans-serif;
+      --head:       'Bricolage Grotesque', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ─────────────────────────────────────── CANVAS */
+    #bg-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.55;
+    }
+
+    /* ─────────────────────────────────────── NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 60px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(11,15,20,0.72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .nav-logo {
+      font-family: var(--head);
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--text);
+    }
+    .nav-logo em { color: var(--accent); font-style: normal; }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 13px;
+      color: var(--text-2);
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-actions { display: flex; gap: 10px; align-items: center; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-family: var(--mono); font-size: 12px; font-weight: 500;
+      padding: 8px 18px; border-radius: 7px; border: 1px solid;
+      cursor: pointer; transition: all 0.17s; text-decoration: none;
+      white-space: nowrap;
+    }
+    .btn-ghost {
+      background: transparent; color: var(--text-2);
+      border-color: var(--border-md);
+    }
+    .btn-ghost:hover { color: var(--text); background: var(--bg-card); }
+    .btn-accent {
+      background: var(--accent); color: #fff;
+      border-color: var(--accent-lo);
+    }
+    .btn-accent:hover { background: var(--accent-hi); }
+
+    /* ─────────────────────────────────────── HERO */
+    .hero {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--accent);
+      border: 1px solid rgba(18,184,134,0.25);
+      background: rgba(18,184,134,0.06);
+      padding: 5px 14px; border-radius: 100px;
+      margin-bottom: 28px;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: blink 2.4s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:.5} 50%{opacity:1} }
+
+    .hero-title {
+      font-family: var(--head);
+      font-size: clamp(44px, 7vw, 88px);
+      font-weight: 800;
+      line-height: 1.02;
+      letter-spacing: -0.045em;
+      max-width: 900px;
+      margin-bottom: 24px;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+
+    .hero-title .line-accent {
+      background: linear-gradient(90deg, var(--accent-hi), var(--ember-hi));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 18px; color: var(--text-2);
+      max-width: 520px; line-height: 1.65;
+      margin: 0 auto 40px;
+      animation: fadeUp 0.6s 0.18s ease both;
+    }
+
+    .hero-cta {
+      display: flex; flex-wrap: wrap; gap: 12px;
+      justify-content: center;
+      animation: fadeUp 0.6s 0.26s ease both;
+    }
+
+    .btn-hero {
+      font-family: var(--mono); font-size: 13px; font-weight: 500;
+      padding: 13px 28px; border-radius: 9px; border: 1px solid;
+      cursor: pointer; transition: all 0.17s; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-hero-primary {
+      background: var(--accent); color: #fff; border-color: var(--accent-lo);
+      box-shadow: 0 0 32px rgba(18,184,134,0.25);
+    }
+    .btn-hero-primary:hover { background: var(--accent-hi); box-shadow: 0 0 48px rgba(18,184,134,0.4); }
+    .btn-hero-ghost {
+      background: transparent; color: var(--text); border-color: var(--border-md);
+    }
+    .btn-hero-ghost:hover { background: var(--bg-card); }
+
+    .hero-meta {
+      margin-top: 48px;
+      display: flex; align-items: center; gap: 28px;
+      flex-wrap: wrap; justify-content: center;
+      animation: fadeUp 0.6s 0.34s ease both;
+    }
+
+    .hero-badge {
+      font-family: var(--mono); font-size: 11px; color: var(--text-3);
+      display: flex; align-items: center; gap: 7px;
+    }
+    .hero-badge svg { color: var(--accent); }
+
+    /* ─────────────────────────────────────── DEMO WINDOW */
+    .demo-wrap {
+      position: relative; z-index: 1;
+      max-width: 860px; margin: 0 auto;
+      padding: 0 24px 100px;
+      animation: fadeUp 0.7s 0.42s ease both;
+    }
+
+    .demo-window {
+      background: var(--bg-card);
+      border: 1px solid var(--border-md);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04);
+    }
+
+    .demo-bar {
+      background: var(--bg-card2);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 18px;
+      display: flex; align-items: center; gap: 12px;
+    }
+
+    .demo-dots { display: flex; gap: 6px; }
+    .demo-dot { width: 11px; height: 11px; border-radius: 50%; }
+    .dd-r { background: #ff5f57; } .dd-y { background: #febc2e; } .dd-g { background: #28c840; }
+
+    .demo-url {
+      flex: 1; text-align: center;
+      font-family: var(--mono); font-size: 11px; color: var(--text-3);
+    }
+    .demo-url span { color: var(--accent); }
+
+    .demo-body {
+      padding: 28px;
+      display: grid; grid-template-columns: 240px 1fr; gap: 20px;
+      min-height: 340px;
+    }
+
+    .demo-sidebar {
+      background: var(--bg-card2); border-radius: 9px;
+      border: 1px solid var(--border); padding: 16px;
+    }
+
+    .demo-nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 10px; border-radius: 6px; margin-bottom: 3px;
+      font-size: 13px; color: var(--text-2);
+      transition: all 0.15s; cursor: default;
+    }
+    .demo-nav-item.active {
+      background: rgba(18,184,134,0.12);
+      color: var(--accent);
+      border: 1px solid rgba(18,184,134,0.2);
+    }
+    .demo-nav-item .icon { font-size: 14px; }
+
+    .demo-main { display: flex; flex-direction: column; gap: 14px; }
+
+    .demo-header { font-family: var(--head); font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+
+    .demo-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+    }
+    .demo-stat {
+      background: var(--bg-card2); border-radius: 8px;
+      border: 1px solid var(--border); padding: 12px 14px;
+    }
+    .demo-stat-label { font-family: var(--mono); font-size: 10px; color: var(--text-3); letter-spacing: 0.06em; text-transform: uppercase; }
+    .demo-stat-val { font-family: var(--head); font-size: 22px; font-weight: 700; margin-top: 4px; color: var(--text); }
+    .demo-stat-val.green { color: var(--accent-hi); }
+    .demo-stat-val.amber { color: var(--ember-hi); }
+
+    .demo-prompt-box {
+      background: var(--bg-card2); border-radius: 9px;
+      border: 1px solid var(--border); padding: 16px;
+      flex: 1;
+    }
+
+    .demo-prompt-label { font-family: var(--mono); font-size: 10px; color: var(--text-3); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
+
+    .demo-msg { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start; }
+    .demo-avatar {
+      width: 26px; height: 26px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; flex-shrink: 0;
+    }
+    .av-user { background: rgba(53,207,161,0.15); color: var(--accent); }
+    .av-ai   { background: rgba(245,139,34,0.15);  color: var(--ember-hi); }
+
+    .demo-bubble {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 8px; padding: 8px 12px;
+      font-size: 12px; color: var(--text-2); line-height: 1.5; max-width: 400px;
+    }
+
+    .typing-dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); margin: 0 2px; animation: tdot 1.2s ease-in-out infinite; }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes tdot { 0%,80%,100%{opacity:.2} 40%{opacity:1} }
+
+    /* ─────────────────────────────────────── SECTIONS */
+    section { position: relative; z-index: 1; }
+
+    .section-inner {
+      max-width: 1060px; margin: 0 auto;
+      padding: 96px 24px;
+    }
+
+    .label {
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 12px;
+    }
+
+    h2 {
+      font-family: var(--head); font-size: clamp(28px, 4vw, 42px);
+      font-weight: 800; letter-spacing: -0.035em; line-height: 1.1;
+      margin-bottom: 16px; color: var(--text);
+    }
+
+    .section-sub {
+      font-size: 17px; color: var(--text-2);
+      max-width: 520px; line-height: 1.65; margin-bottom: 56px;
+    }
+
+    /* ─────────────────────────────────────── FEATURES */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    .feat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 28px;
+      transition: border-color 0.2s, transform 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .feat-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent-hi), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .feat-card:hover { border-color: var(--border-hi); transform: translateY(-2px); }
+    .feat-card:hover::before { opacity: 1; }
+
+    .feat-icon {
+      width: 40px; height: 40px; border-radius: 9px;
+      background: rgba(18,184,134,0.1);
+      border: 1px solid rgba(18,184,134,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; margin-bottom: 18px;
+    }
+
+    .feat-icon.amber {
+      background: rgba(245,139,34,0.1);
+      border-color: rgba(245,139,34,0.2);
+    }
+    .feat-icon.blue {
+      background: rgba(121,192,255,0.08);
+      border-color: rgba(121,192,255,0.2);
+    }
+
+    .feat-title {
+      font-family: var(--head); font-size: 17px; font-weight: 700;
+      letter-spacing: -0.02em; margin-bottom: 8px; color: var(--text);
+    }
+    .feat-desc { font-size: 14px; color: var(--text-2); line-height: 1.65; }
+
+    /* ─────────────────────────────────────── STACK */
+    .stack-section { border-top: 1px solid var(--border); }
+
+    .stack-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    .stack-pill {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 9px; padding: 16px 14px;
+      display: flex; flex-direction: column; gap: 6px;
+      transition: border-color 0.2s;
+    }
+    .stack-pill:hover { border-color: var(--border-md); }
+    .stack-pill-name {
+      font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--text);
+    }
+    .stack-pill-ver { font-family: var(--mono); font-size: 11px; color: var(--text-3); }
+
+    /* ─────────────────────────────────────── QUICK START */
+    .qs-section { border-top: 1px solid var(--border); }
+
+    .qs-steps {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+    }
+
+    .qs-step {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+    }
+
+    .qs-step-head {
+      background: var(--bg-card2); border-bottom: 1px solid var(--border);
+      padding: 12px 18px; display: flex; align-items: center; gap: 12px;
+    }
+    .qs-num {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: rgba(18,184,134,0.15); border: 1px solid rgba(18,184,134,0.3);
+      color: var(--accent); font-family: var(--mono); font-size: 11px; font-weight: 500;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .qs-step-title { font-size: 13px; font-weight: 500; color: var(--text); }
+
+    .qs-step pre {
+      font-family: var(--mono); font-size: 12.5px; padding: 18px 20px;
+      color: var(--text); line-height: 1.8; overflow-x: auto;
+    }
+
+    .kw  { color: #ff7b72; }
+    .fn  { color: #d2a8ff; }
+    .str { color: var(--accent-hi); }
+    .cm  { color: var(--text-3); font-style: italic; }
+    .at  { color: #79c0ff; }
+    .num { color: var(--ember-hi); }
+
+    /* ─────────────────────────────────────── CALLOUT CTA */
+    .cta-section { border-top: 1px solid var(--border); }
+
+    .cta-box {
+      border: 1px solid var(--border-hi);
+      border-radius: 18px; padding: 72px 48px;
+      text-align: center;
+      background: radial-gradient(ellipse 60% 60% at 50% 0%, rgba(18,184,134,0.09), transparent);
+      position: relative; overflow: hidden;
+    }
+
+    .cta-glow {
+      position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+      width: 400px; height: 120px;
+      background: radial-gradient(ellipse, rgba(18,184,134,0.18), transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-box h2 { font-size: clamp(30px, 4vw, 50px); margin-bottom: 16px; }
+    .cta-box p { color: var(--text-2); max-width: 440px; margin: 0 auto 36px; font-size: 17px; }
+
+    .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    /* ─────────────────────────────────────── FOOTER */
+    footer {
+      position: relative; z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 40px 24px;
+    }
+    .footer-inner {
+      max-width: 1060px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px;
+    }
+    .footer-logo {
+      font-family: var(--head); font-size: 16px; font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+    .footer-logo em { color: var(--accent); font-style: normal; }
+
+    .footer-links {
+      display: flex; gap: 24px; list-style: none;
+    }
+    .footer-links a {
+      font-family: var(--mono); font-size: 12px; color: var(--text-3);
+      transition: color 0.15s;
+    }
+    .footer-links a:hover { color: var(--text-2); }
+
+    .footer-copy { font-family: var(--mono); font-size: 11px; color: var(--text-3); }
+
+    /* ─────────────────────────────────────── ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─────────────────────────────────────── MOBILE */
+    @media (max-width: 720px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .demo-body { grid-template-columns: 1fr; }
+      .demo-sidebar { display: none; }
+      .qs-steps { grid-template-columns: 1fr; }
+      .cta-box { padding: 48px 24px; }
+      .hero-title { letter-spacing: -0.03em; }
+      .section-inner { padding: 64px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Animated background canvas -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <span class="nav-logo">Prompt<em>Forge</em></span>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#stack">Stack</a></li>
+    <li><a href="#quickstart">Quick Start</a></li>
+    <li><a href="#docs">Docs</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="https://github.com/aryanraj6308/promptforge-ai-saas" class="btn btn-ghost" target="_blank">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+      GitHub
+    </a>
+    <a href="#quickstart" class="btn btn-accent">Get Started →</a>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-eyebrow"><span class="pulse"></span>v1.0.0 · Open Source</div>
+  <h1 class="hero-title">
+    Ship your<br>
+    <span class="line-accent">AI SaaS product</span><br>
+    in days
+  </h1>
+  <p class="hero-sub">
+    PromptForge is a production-ready Next.js 16 starter with a bespoke design system, TypeScript throughout, and everything wired up so you can focus on your product.
+  </p>
+  <div class="hero-cta">
+    <a href="https://github.com/aryanraj6308/promptforge-ai-saas" class="btn-hero btn-hero-primary" target="_blank">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+      View on GitHub
+    </a>
+    <a href="#quickstart" class="btn-hero btn-hero-ghost">Quick Start ↓</a>
+  </div>
+  <div class="hero-meta">
+    <span class="hero-badge">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      Next.js 16 · App Router
+    </span>
+    <span class="hero-badge">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      TypeScript strict mode
+    </span>
+    <span class="hero-badge">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      MIT License · Free forever
+    </span>
+  </div>
+</section>
+
+<!-- ─── DEMO WINDOW ─── -->
+<div class="demo-wrap reveal">
+  <div class="demo-window">
+    <div class="demo-bar">
+      <div class="demo-dots">
+        <div class="demo-dot dd-r"></div>
+        <div class="demo-dot dd-y"></div>
+        <div class="demo-dot dd-g"></div>
+      </div>
+      <div class="demo-url">localhost:3000<span>/dashboard</span></div>
+    </div>
+    <div class="demo-body">
+      <div class="demo-sidebar">
+        <div class="demo-nav-item active"><span class="icon">◈</span> Dashboard</div>
+        <div class="demo-nav-item"><span class="icon">⬡</span> Prompts</div>
+        <div class="demo-nav-item"><span class="icon">◎</span> Analytics</div>
+        <div class="demo-nav-item"><span class="icon">⊞</span> API Keys</div>
+        <div class="demo-nav-item"><span class="icon">◉</span> Settings</div>
+      </div>
+      <div class="demo-main">
+        <div class="demo-header">Welcome back, Aarav 👋</div>
+        <div class="demo-stats">
+          <div class="demo-stat">
+            <div class="demo-stat-label">Requests</div>
+            <div class="demo-stat-val">48.2k</div>
+          </div>
+          <div class="demo-stat">
+            <div class="demo-stat-label">Accuracy</div>
+            <div class="demo-stat-val green">97.4%</div>
+          </div>
+          <div class="demo-stat">
+            <div class="demo-stat-label">Tokens</div>
+            <div class="demo-stat-val amber">1.2M</div>
+          </div>
+        </div>
+        <div class="demo-prompt-box">
+          <div class="demo-prompt-label">Live prompt session</div>
+          <div class="demo-msg">
+            <div class="demo-avatar av-user">U</div>
+            <div class="demo-bubble">Generate a product description for a minimalist leather wallet.</div>
+          </div>
+          <div class="demo-msg">
+            <div class="demo-avatar av-ai">AI</div>
+            <div class="demo-bubble">
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── FEATURES ─── -->
+<section id="features">
+  <div class="section-inner">
+    <div class="label">// what's inside</div>
+    <h2>Everything you need to ship</h2>
+    <p class="section-sub">Skip months of boilerplate. PromptForge gives you a solid foundation — designed and architected so you can build fast without cutting corners.</p>
+
+    <div class="features-grid reveal">
+      <div class="feat-card">
+        <div class="feat-icon">⬛</div>
+        <div class="feat-title">Next.js 16 App Router</div>
+        <div class="feat-desc">Nested layouts, React Server Components, streaming, and parallel routes — all pre-configured and ready to extend.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon amber">🎨</div>
+        <div class="feat-title">Custom Design System</div>
+        <div class="feat-desc">Three bespoke Tailwind color families — ink, accent, ember — with custom shadows and animation keyframes baked in.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon blue">🟦</div>
+        <div class="feat-title">TypeScript Strict Mode</div>
+        <div class="feat-desc">Full type-safety from day one. <code style="font-family:var(--mono);font-size:12px;color:#79c0ff">@/*</code> path aliases configured, incremental builds enabled.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🌙</div>
+        <div class="feat-title">Dark Mode First</div>
+        <div class="feat-desc">Class-based dark mode with no flash. Designed dark from the ground up — light mode is a first-class citizen too.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon amber">⚡</div>
+        <div class="feat-title">Optimised Build Pipeline</div>
+        <div class="feat-desc">ESLint 9 flat config, PostCSS + Autoprefixer, and <code style="font-family:var(--mono);font-size:12px;color:var(--accent-hi)">npm ci</code> locked installs for reproducible deployments.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">✦</div>
+        <div class="feat-title">Lucide Icons + clsx</div>
+        <div class="feat-desc">Tree-shakable icon library and a battle-tested class name utility — two essential companions for building fast UI.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── STACK ─── -->
+<section id="stack" class="stack-section">
+  <div class="section-inner">
+    <div class="label">// tech stack</div>
+    <h2>Built on solid primitives</h2>
+    <p class="section-sub">No heavy meta-frameworks on top of meta-frameworks. Just proven tools at the right versions.</p>
+
+    <div class="stack-grid reveal">
+      <div class="stack-pill"><span class="stack-pill-name">Next.js</span><span class="stack-pill-ver">^16.2.6</span></div>
+      <div class="stack-pill"><span class="stack-pill-name">React</span><span class="stack-pill-ver">^19.2.0</span></div>
+      <div class="stack-pill"><span class="stack-pill-name">TypeScript</span><span class="stack-pill-ver">^5.9.3</span></div>
+      <div class="stack-pill"><span class="stack-pill-name">Tailwind</span><span class="stack-pill-ver">3.4.4</span></div>
+      <div class="stack-pill"><span class="stack-pill-name">ESLint</span><span class="stack-pill-ver">^9.39.1</span></div>
+      <div class="stack-pill"><span class="stack-pill-name">PostCSS</span><span class="stack-pill-ver">^8.5.10</span></div>
+      <div class="stack-pill"><span class="stack-pill-name">lucide-react</span><span class="stack-pill-ver">0.468.0</span></div>
+      <div class="stack-pill"><span class="stack-pill-name">clsx</span><span class="stack-pill-ver">2.1.1</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── QUICK START ─── -->
+<section id="quickstart" class="qs-section">
+  <div class="section-inner">
+    <div class="label">// quickstart</div>
+    <h2>Up and running in 60 seconds</h2>
+    <p class="section-sub">Clone, install, configure — that's it. The dev server has hot reload and TypeScript errors in your terminal.</p>
+
+    <div class="qs-steps reveal">
+      <div class="qs-step">
+        <div class="qs-step-head">
+          <div class="qs-num">1</div>
+          <span class="qs-step-title">Clone &amp; install</span>
+        </div>
+        <pre><span class="cm"># clone the repo</span>
+git clone https://github.com/aryanraj6308/promptforge-ai-saas
+<span class="kw">cd</span> promptforge-ai-saas
+
+<span class="cm"># locked, reproducible install</span>
+npm ci</pre>
+      </div>
+      <div class="qs-step">
+        <div class="qs-step-head">
+          <div class="qs-num">2</div>
+          <span class="qs-step-title">Set environment variables</span>
+        </div>
+        <pre>cp .env.example .env.local
+
+<span class="cm"># required keys in .env.local:</span>
+<span class="at">NEXT_PUBLIC_APP_URL</span>=http://localhost:3000
+<span class="at">ANTHROPIC_API_KEY</span>=sk-ant-…
+<span class="at">DATABASE_URL</span>=postgres://…
+<span class="at">NEXTAUTH_SECRET</span>=your-secret</pre>
+      </div>
+      <div class="qs-step">
+        <div class="qs-step-head">
+          <div class="qs-num">3</div>
+          <span class="qs-step-title">Start the dev server</span>
+        </div>
+        <pre>npm run dev
+
+<span class="cm"># open in your browser:</span>
+<span class="str">http://localhost:3000</span>
+
+<span class="cm"># production build:</span>
+npm run build &amp;&amp; npm start</pre>
+      </div>
+      <div class="qs-step">
+        <div class="qs-step-head">
+          <div class="qs-num">4</div>
+          <span class="qs-step-title">Deploy to Vercel</span>
+        </div>
+        <pre><span class="cm"># install Vercel CLI globally</span>
+npm i -g vercel
+
+<span class="cm"># deploy with one command</span>
+vercel
+
+<span class="cm"># or push to main on GitHub —</span>
+<span class="cm"># Vercel auto-deploys on push</span></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CTA ─── -->
+<section id="docs" class="cta-section">
+  <div class="section-inner">
+    <div class="cta-box reveal">
+      <div class="cta-glow"></div>
+      <div class="label" style="justify-content:center;display:flex;">// open source</div>
+      <h2>Start building today</h2>
+      <p>PromptForge is free, open source, and MIT licensed. Fork it, extend it, make it yours.</p>
+      <div class="cta-btns">
+        <a href="https://github.com/aryanraj6308/promptforge-ai-saas" class="btn-hero btn-hero-primary" target="_blank">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          Star on GitHub
+        </a>
+        <a href="https://github.com/aryanraj6308/promptforge-ai-saas/fork" class="btn-hero btn-hero-ghost" target="_blank">Fork &amp; customize</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-logo">Prompt<em>Forge</em> AI</span>
+    <ul class="footer-links">
+      <li><a href="https://github.com/aryanraj6308/promptforge-ai-saas" target="_blank">GitHub</a></li>
+      <li><a href="https://github.com/aryanraj6308/promptforge-ai-saas/issues" target="_blank">Issues</a></li>
+      <li><a href="https://github.com/aryanraj6308/promptforge-ai-saas/blob/main/LICENSE" target="_blank">MIT License</a></li>
+    </ul>
+    <span class="footer-copy">© 2026 PromptForge · Built with Next.js 16</span>
+  </div>
+</footer>
+
+<script>
+/* ── Particle canvas ── */
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, pts;
+
+function resize() {
+  W = canvas.width  = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+  initPts();
+}
+
+function initPts() {
+  pts = Array.from({ length: 55 }, () => ({
+    x: Math.random() * W,
+    y: Math.random() * H,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.3,
+    r: Math.random() * 1.5 + 0.5
+  }));
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  /* grid */
+  ctx.strokeStyle = 'rgba(53,207,161,0.04)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < W; x += 40) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+  }
+  for (let y = 0; y < H; y += 40) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+
+  /* lines */
+  for (let i = 0; i < pts.length; i++) {
+    for (let j = i + 1; j < pts.length; j++) {
+      const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
+      const d = Math.sqrt(dx*dx + dy*dy);
+      if (d < 140) {
+        ctx.strokeStyle = `rgba(53,207,161,${0.06 * (1 - d/140)})`;
+        ctx.lineWidth = 0.5;
+        ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y); ctx.stroke();
+      }
+    }
+  }
+
+  /* dots */
+  pts.forEach(p => {
+    ctx.fillStyle = 'rgba(53,207,161,0.4)';
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0 || p.x > W) p.vx *= -1;
+    if (p.y < 0 || p.y > H) p.vy *= -1;
+  });
+
+  requestAnimationFrame(draw);
+}
+
+window.addEventListener('resize', resize);
+resize();
+draw();
+
+/* ── Scroll reveal ── */
+const revEls = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+revEls.forEach(el => obs.observe(el));
+
+/* ── Typing animation loop ── */
+const bubble = document.querySelector('.demo-bubble:last-child');
+const responses = [
+  'Crafted from full-grain leather with a slim bifold profile, this wallet carries what matters — nothing more.',
+  'Designed to age gracefully, the matte finish deepens with wear, making every scratch part of the story.',
+  'Three card slots, one bill compartment. Because simplicity is the ultimate sophistication.'
+];
+let ri = 0;
+function typeNext() {
+  const text = responses[ri % responses.length];
+  ri++;
+  let i = 0;
+  bubble.innerHTML = '';
+  const interval = setInterval(() => {
+    if (i < text.length) {
+      bubble.textContent += text[i++];
+    } else {
+      clearInterval(interval);
+      setTimeout(() => {
+        bubble.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
+        setTimeout(typeNext, 900);
+      }, 3200);
+    }
+  }, 22);
+}
+setTimeout(() => typeNext(), 1200);
+</script>
+</body>
+</html>
